@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coin Empire</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101522;color:white;font-family:Arial;text-align:center}
+header{padding:20px;background:#192337}
+h1{color:#ffd34e}
+.balance{font-size:36px;color:#ffd34e;margin:25px}
+.coin{width:210px;height:210px;border-radius:50%;margin:30px auto;background:radial-gradient(#fff0a1,#e8a900,#9c5c00);border:9px solid #ffdc65;display:flex;align-items:center;justify-content:center;font-size:90px;cursor:pointer}
+button{background:#273750;color:white;border:0;border-radius:12px;padding:14px;margin:7px;font-size:15px}
+nav{position:fixed;bottom:0;width:100%;background:#192337;padding:10px 0;display:flex;justify-content:space-around}
+main{padding-bottom:100px}
+</style>
+</head>
+<body>
+<header><h1>👑 COIN EMPIRE</h1><p>Build Your Empire</p></header>
+<main>
+<div class="balance">🪙 <span id="coins">0</span></div>
+<p>YOUR BALANCE</p>
+<div class="coin" onclick="tap()">🪙</div>
+<p>TAP TO EARN</p>
+<p>⚡ Energy: <span id="energy">1000</span></p>
+<p>👆 Taps: <span id="taps">0</span></p>
+<button onclick="upgrade()">⬆️ Upgrade (100 Coins)</button>
+</main>
+<nav>
+<button onclick="show('Game')">🪙 Game</button>
+<button onclick="show('Friends')">👥 Friends</button>
+<button onclick="show('Ranking')">🏆 Ranking</button>
+<button onclick="show('VIP')">👑 VIP</button>
+</nav>
+<script>
+const tg=window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+let coins=Number(localStorage.getItem("coins")||0);
+let energy=1000,taps=0,power=1;
+function update(){
+document.getElementById("coins").textContent=coins;
+document.getElementById("energy").textContent=energy;
+document.getElementById("taps").textContent=taps;
+localStorage.setItem("coins",coins);
+}
+function tap(){
+if(energy<=0)return;
+coins+=power;energy--;taps++;update();
+if(tg.HapticFeedback)tg.HapticFeedback.impactOccurred("light");
+}
+function upgrade(){
+if(coins>=100){coins-=100;power++;update();alert("Upgrade successful!");}
+else alert("Need 100 coins!");
+}
+function show(page){
+if(page!=="Game")alert(page+" coming soon!");
+}
+update();
+</script>
+</body>
+</html>
